@@ -1,16 +1,39 @@
 const std = @import("std");
 
 const Token = union(enum) {
-    ILLEGAL,
-    EOF,
+    // Types
+    NUMBER: []const u8,
+    STRING: []const u8,
+    BOOLEAN,
+    // Keywords
+    LET,
+    IDENTIFIER,
+    FUNCTION,
+    // Operators
     EQUAL,
     PLUS,
+    MINUS,
+    POWER, // WIP
+    MULTIPLY,
+    DEVIDE,
+    NOTEQUAL, // WIP
+    // Logic
+    LESSTHAN,
+    GREATERTHAN,
+    // Delimiters
     COMMA,
     SEMICOLON,
+
     LPAREN,
     RPAREN,
     LBRACE,
     RBRACE,
+
+    QUOTES,
+    // Other
+    BANG, // WIP
+    EOF,
+    ILLEGAL,
 };
 
 const Lexer = struct {
