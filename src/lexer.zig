@@ -52,7 +52,6 @@ pub const Lexer = struct {
     readPosition: usize = 0,
     input: []const u8,
 
-    fn init(input: []const u8) Lexer {
     pub fn init(input: []const u8) Lexer {
         var lex = Self{ .input = input };
         lex.nextChar();
