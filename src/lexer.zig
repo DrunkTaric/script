@@ -83,7 +83,15 @@ pub const Lexer = struct {
         self.readPosition += 1;
     }
 
-    fn nextToken(self: *Self) Token {
+    fn readString(self: *Self) []const u8 {
+        const start = self.position;
+        self.nextChar();
+        while (!self.atEnd() and self.ch != '"') {
+            self.nextChar();
+        }
+        return self.input[start + 1 .. self.position];
+    }
+
         const token: Token = switch (self.ch) {
             0 => .EOF,
             '=' => .EQUAL,
