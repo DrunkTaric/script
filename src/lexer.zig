@@ -59,6 +59,14 @@ pub const Lexer = struct {
         return lex;
     }
 
+    fn atEnd(self: *Self) bool {
+        // std.debug.print("input length: {?}\n", .{self.input.len});
+        // std.debug.print("current position: {?}\n", .{self.position});
+        // std.debug.print("next position: {?}\n", .{self.readPosition});
+        // std.debug.print("are we at the end ? {?}\n", .{self.readPosition >= self.input.len});
+        // std.debug.print("=========================\n", .{});
+        return self.readPosition >= self.input.len;
+    }
     fn nextChar(self: *Self) void {
         if (self.atEnd()) {
             self.ch = 0;
