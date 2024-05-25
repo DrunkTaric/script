@@ -67,6 +67,11 @@ pub const Lexer = struct {
         // std.debug.print("=========================\n", .{});
         return self.readPosition >= self.input.len;
     }
+
+    fn peakChar(self: *Self) u8 {
+        return self.input[self.readPosition];
+    }
+
     fn nextChar(self: *Self) void {
         if (self.atEnd()) {
             self.ch = 0;
