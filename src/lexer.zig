@@ -44,6 +44,7 @@ fn isCharcter(ch: u8) bool {
     return std.ascii.isAlphabetic(ch) or ch == '_';
 }
 
+pub const Lexer = struct {
     const Self = @This();
 
     ch: u8 = 0,
@@ -52,13 +53,14 @@ fn isCharcter(ch: u8) bool {
     input: []const u8,
 
     fn init(input: []const u8) Lexer {
+    pub fn init(input: []const u8) Lexer {
         var lex = Self{ .input = input };
-        lex.readChar();
+        lex.nextChar();
         return lex;
     }
 
-    fn readChar(self: *Self) void {
-        if (self.readPosition >= self.input.len) {
+    fn nextChar(self: *Self) void {
+        if (self.atEnd()) {
             self.ch = 0;
         } else {
             self.ch = self.input[self.readPosition];
