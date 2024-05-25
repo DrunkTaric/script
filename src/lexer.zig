@@ -36,7 +36,14 @@ const Token = union(enum) {
     ILLEGAL,
 };
 
-const Lexer = struct {
+fn isNumber(ch: u8) bool {
+    return std.ascii.isDigit(ch);
+}
+
+fn isCharcter(ch: u8) bool {
+    return std.ascii.isAlphabetic(ch) or ch == '_';
+}
+
     const Self = @This();
 
     ch: u8 = 0,
