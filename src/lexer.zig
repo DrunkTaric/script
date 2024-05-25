@@ -1,4 +1,4 @@
-const expectEqualDeep = @import("std").testing.expectEqualDeep;
+const std = @import("std");
 
 const Token = union(enum) {
     ILLEGAL,
