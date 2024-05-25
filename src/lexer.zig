@@ -107,20 +107,42 @@ pub const Lexer = struct {
         return self.input[start..self.position];
     }
 
+    pub fn nextToken(self: *Self) Token {
+        // std.debug.print("current caracter: {?}", .{self.ch});
         const token: Token = switch (self.ch) {
             0 => .EOF,
+
+            '0'...'9' => turn: {
+                break :turn .{ .NUMBER = self.readInt() };
+            },
+            'A'...'Z', 'a'...'z', '_' => turn: {
+                break :turn .IDENTIFIER;
+            },
+
+            '/' => .DEVIDE,
+            '*' => .MULTIPLY,
             '=' => .EQUAL,
             '+' => .PLUS,
+            '-' => .MINUS,
+
+            '>' => .GREATERTHAN,
+            '<' => .LESSTHAN,
+
             ',' => .COMMA,
             ';' => .SEMICOLON,
             '(' => .LPAREN,
             ')' => .RPAREN,
             '{' => .LBRACE,
             '}' => .RBRACE,
+
+            '"' => turn: {
+                break :turn .{ .STRING = self.readString() };
+            },
+
             else => .ILLEGAL,
         };
 
-        self.readChar();
+        self.nextChar();
 
         return token;
     }
