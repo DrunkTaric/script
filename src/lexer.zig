@@ -148,6 +148,8 @@ pub const Lexer = struct {
     }
 };
 
+const expectEqualDeep = std.testing.expectEqualDeep;
+
 test "test getnextToken()" {
     const input = "=+(){},;";
     var lex = Lexer.init(input);
