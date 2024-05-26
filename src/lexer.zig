@@ -1,22 +1,26 @@
 const std = @import("std");
 
-const Token = union(enum) {
+pub const Token = union(enum) {
     // Types
     NUMBER: []const u8,
     STRING: []const u8,
-    BOOLEAN,
+    BOOLEAN: bool,
     // Keywords
     LET,
-    IDENTIFIER,
+    IDENTIFIER: []const u8,
     FUNCTION,
+    RETURN,
+    IF,
+    ELSE,
     // Operators
     EQUAL,
+    ASSIGN,
     PLUS,
     MINUS,
     POWER, // WIP
     MULTIPLY,
     DEVIDE,
-    NOTEQUAL, // WIP
+    NOTASSIGN, // WIP
     // Logic
     LESSTHAN,
     GREATERTHAN,
@@ -32,6 +36,7 @@ const Token = union(enum) {
     QUOTES,
     // Other
     BANG, // WIP
+    COMMENT: []const u8,
     EOF,
     ILLEGAL,
 };
