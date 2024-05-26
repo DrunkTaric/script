@@ -9,7 +9,4 @@ pub fn main() !void {
         \\//lebron is real//let x = 1 / 2;
     ;
     var lex = lexer.Lexer.init(input);
-    while (lex.position <= input.len) : (i += 1) {
-        std.debug.print("Current Token: {?}\n", .{lex.nextToken()});
-    }
 }
