@@ -132,6 +132,8 @@ pub const Lexer = struct {
     pub fn nextToken(self: *Self) Token {
         // std.debug.print("current caracter: {?}", .{self.ch});
         self.skipWhitespace();
+        // std.debug.print("Current index that being tokenize is: {?}\n", .{self.position});
+        // std.debug.print("Current chacter that being tokenize is: {c}\n", .{self.ch});
         const token: Token = switch (self.ch) {
             0 => .EOF,
 
