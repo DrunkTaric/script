@@ -141,7 +141,14 @@ pub const Lexer = struct {
                 break :turn .{ .NUMBER = self.readInt() };
             },
             'A'...'Z', 'a'...'z', '_' => turn: {
-                break :turn .IDENTIFIER;
+                const extracted_string: []const u8 = self.readChar();
+                const map = std.ComptimeStringMap(Token, .{ .{ "let", .LET }, .{ "method", .FUNCTION }, .{ "true", .{ .BOOLEAN = true } }, .{ "false", .{ .BOOLEAN = false } }, .{ "when", .IF }, .{ "otherwise", .ELSE }, .{ "export", .RETURN } });
+
+                if (map.get(extracted_string)) |token| {
+                    break :turn token;
+                }
+
+                break :turn .{ .IDENTIFIER = extracted_string };
             },
 
             '/' => .DEVIDE,
