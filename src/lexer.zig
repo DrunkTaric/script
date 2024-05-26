@@ -159,7 +159,13 @@ pub const Lexer = struct {
                 break :turn .DEVIDE;
             },
             '*' => .MULTIPLY,
-            '=' => .EQUAL,
+            '=' => turn: {
+                if (self.peakChar() == '=') {
+                    self.nextChar();
+                    break :turn .EQUAL;
+                }
+                break :turn .ASSIGN;
+            },
             '+' => .PLUS,
             '-' => .MINUS,
 
