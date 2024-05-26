@@ -131,6 +131,7 @@ pub const Lexer = struct {
 
     pub fn nextToken(self: *Self) Token {
         // std.debug.print("current caracter: {?}", .{self.ch});
+        self.skipWhitespace();
         const token: Token = switch (self.ch) {
             0 => .EOF,
 
