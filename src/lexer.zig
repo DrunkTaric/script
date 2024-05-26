@@ -73,6 +73,9 @@ pub const Lexer = struct {
     }
 
     fn peakChar(self: *Self) u8 {
+        if (self.atEnd()) {
+            return 0;
+        }
         return self.input[self.readPosition];
     }
 
