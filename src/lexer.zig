@@ -92,26 +92,28 @@ pub const Lexer = struct {
 
     fn readString(self: *Self) []const u8 {
         const start = self.position;
-        self.nextChar();
-        while (!self.atEnd() and self.ch != '"') {
-            self.nextChar();
-        }
-        return self.input[start + 1 .. self.position];
-    }
-
-    fn readInt(self: *Self) []const u8 {
-        const start = self.position;
-        while (!self.atEnd() and isNumber(self.ch)) {
+        while (self.peakChar() != '"') {
             self.nextChar();
         }
         return self.input[start..self.position];
     }
 
-    fn readChar(self: *Self) []const u8 {
+    fn readInt(self: *Self) []const u8 {
         const start = self.position;
-        while (!self.atEnd() and isCharcter(self.ch)) {
+        while (isNumber(self.peakChar())) {
             self.nextChar();
         }
+        return self.input[start .. self.position + 1];
+    }
+
+    fn readChar(self: *Self) []const u8 {
+        const start = self.position;
+        while (isCharcter(self.peakChar())) {
+            self.nextChar();
+        }
+        //std.debug.print("the consumed char: {any}, took and index starting from {any} to {any}\n", .{ self.input[start..self.position], start, self.position + 1 });
+        return self.input[start .. self.position + 1];
+    }
         return self.input[start..self.position];
     }
 
