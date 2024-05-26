@@ -114,6 +114,12 @@ pub const Lexer = struct {
         //std.debug.print("the consumed char: {any}, took and index starting from {any} to {any}\n", .{ self.input[start..self.position], start, self.position + 1 });
         return self.input[start .. self.position + 1];
     }
+
+    fn readComment(self: *Self) []const u8 {
+        const start = self.position;
+        while (!(self.ch == '/' and self.peakChar() == '/')) {
+            self.nextChar();
+        }
         return self.input[start..self.position];
     }
 
