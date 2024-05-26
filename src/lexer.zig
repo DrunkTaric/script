@@ -166,6 +166,12 @@ pub const Lexer = struct {
                 }
                 break :turn .ASSIGN;
             },
+            '!' => turn: {
+                if (self.peakChar() == '=') {
+                    break :turn .NOTASSIGN;
+                }
+                break :turn .BANG;
+            },
             '+' => .PLUS,
             '-' => .MINUS,
 
