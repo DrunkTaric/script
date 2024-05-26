@@ -123,6 +123,12 @@ pub const Lexer = struct {
         return self.input[start..self.position];
     }
 
+    fn skipWhitespace(self: *Self) void {
+        while (std.ascii.isWhitespace(self.ch)) {
+            self.nextChar();
+        }
+    }
+
     pub fn nextToken(self: *Self) Token {
         // std.debug.print("current caracter: {?}", .{self.ch});
         const token: Token = switch (self.ch) {
