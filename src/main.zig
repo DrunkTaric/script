@@ -2,9 +2,11 @@ const std = @import("std");
 const lexer = @import("./lexer.zig");
 
 pub fn main() !void {
-    var i: u8 = 0;
     const input =
-        \\let x = "lebron"
+        \\let x = 5;
+        \\let y = 10;
+        \\method (i < 20) export true;
+        \\//lebron is real//let x = 1 / 2;
     ;
     var lex = lexer.Lexer.init(input);
     while (lex.position <= input.len) : (i += 1) {
