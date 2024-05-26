@@ -151,7 +151,13 @@ pub const Lexer = struct {
                 break :turn .{ .IDENTIFIER = extracted_string };
             },
 
-            '/' => .DEVIDE,
+            '/' => turn: {
+                if (self.peakChar() == '/') {
+                    const comment = self.readComment();
+                    break :turn .{ .COMMENT = comment };
+                }
+                break :turn .DEVIDE;
+            },
             '*' => .MULTIPLY,
             '=' => .EQUAL,
             '+' => .PLUS,
