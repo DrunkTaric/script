@@ -203,7 +203,7 @@ const expectEqualDeep = std.testing.expectEqualDeep;
 test "test getnextToken()" {
     const input = "=+(){},;";
     var lex = Lexer.init(input);
-    const tokens = [_]Token{ .EQUAL, .PLUS, .LPAREN, .RPAREN, .LBRACE, .RBRACE, .COMMA, .SEMICOLON };
+    const tokens = [_]Token{ .ASSIGN, .PLUS, .LPAREN, .RPAREN, .LBRACE, .RBRACE, .COMMA, .SEMICOLON };
     for (tokens) |token| {
         const tok = lex.nextToken();
         try expectEqualDeep(token, tok);
