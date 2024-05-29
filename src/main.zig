@@ -1,5 +1,7 @@
 const std = @import("std");
-const lexer = @import("./lexer.zig");
+const Lexer = @import("./lexer/lexer.zig").Lexer;
+const Parser = @import("./parser/parser.zig").Parser;
+
 test {
     _ = @import("./lexer.zig");
 }
@@ -8,8 +10,12 @@ pub fn main() !void {
     const input =
         \\let x = 5;
         \\let y = 10;
-        \\method (i < 20) export true;
-        \\//lebron is real//let x = 1 / 2;
+        \\let x = 1 / 2;
     ;
-    var lex = lexer.Lexer.init(input);
+    var lex = Lexer.init(input);
+    var p = Parser.init(&lex);
+    while (p.currentToken != .EOF) {
+        const token = p.parseToken();
+        std.debug.print("Exported Token: {any}\n", .{token});
+    }
 }
