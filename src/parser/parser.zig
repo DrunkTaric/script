@@ -5,7 +5,7 @@ const Token = @import("./lexer/types.zig").Token;
 const Expression = struct { literal: *[]const u8, value: ?*const Expression };
 
 const LetError = error{ IdentifierNotFound, AssignNorEnd, ValueNotFound };
-const LetExpression = struct { name: *[]const u8, value: ?*ParseResult };
+const LetExpression = struct { name: *[]const u8, value: ?*type };
 
 const ConditionError = error{};
 const ConditionTypes = enum { Equal, lowerThan, greaterThan, lowerOrEqual, greaterOrEqual, notEqual };
@@ -16,23 +16,17 @@ const NumberExpression = struct { value: *[]const u8 };
 const StringExpression = struct { value: *[]const u8 };
 const BooleanExpression = struct { value: *bool };
 
-const ParseType = union(enum) {
-    Expression: Expression,
-    ConditionExpression: ConditionExpression,
-    LetExpression: LetExpression,
-    NumberExpression: NumberExpression,
-    StringExpression: StringExpression,
-    BooleanExpression: BooleanExpression,
-};
-const ParseResult = struct {
-    type: ParseType,
-    Expr: ?Expression = undefined,
-    condExpr: ?ConditionExpression = undefined,
-    letExpr: ?LetExpression = undefined,
-    numberExpr: ?NumberExpression = undefined,
-    stringExpr: ?StringExpression = undefined,
-    booleanExpr: ?BooleanExpression = undefined,
-};
+fn ParseResult2(comptime expression: type) !type {
+    return struct {
+        const This = @This();
+
+        type: expression,
+
+        pub fn init(value: expression) This {
+            return This{ .type = value };
+        }
+    };
+}
 
 pub const Parser = struct {
     program_array: std.ArrayList,
@@ -52,7 +46,7 @@ pub const Parser = struct {
 
         var gpa = std.heap.GeneralPurposeAllocator(.{}, {});
         const allocator = gpa.allocator();
-        p.program_array = std.ArrayList(ParseType).init(allocator);
+        p.program_array = std.ArrayList(type).init(allocator);
 
         return p;
     }
@@ -79,34 +73,30 @@ pub const Parser = struct {
         return exp;
     }
 
-    pub fn parseToken1(self: *Parser) ParseResult {
+    pub fn parseToken1(self: *Parser) type {
         const emptyExpression = Expression{ .literal = undefined, .value = undefined };
         const tok = switch (self.currentToken) {
-            Token.LET => ParseResult{ .LetExpression = self.parseIdentifier() catch |e| switch (e) {
+            Token.LET => ParseResult2(.LetExpression).init(self.parseIdentifier()) catch |e| switch (e) {
                 LetError.AssignNorEnd => @panic("[ Error ] didn't find `;` to close the satement, or `=` to assign the identifer to a statement"),
                 LetError.IdentifierNotFound => @panic("[ Error ] identifier name not found"),
                 else => @panic("[ Error ] while parsing!"),
-            } },
+            },
             Token.NUMBER => turn: {
                 if (self.peekToken == .SEMICOLON) {
                     var number = self.currentToken.NUMBER;
                     const expression = self.parseNumber(&number);
                     self.nextToken();
-                    break :turn ParseResult{ .NumberExpression = expression };
+                    break :turn ParseResult2(.NumberExpression).init(expression);
                 }
                 if (self.peekToken == .EQUAL or self.peekToken == .GREATERTHAN or self.peekToken == .LESSTHAN or self.peekToken == .NOTEQUAL) {
-                    break :turn ParseResult{ .Expression = emptyExpression };
+                    break :turn ParseResult2(.Expression).init(emptyExpression);
                 }
-                break :turn ParseResult{ .Expression = emptyExpression };
+                break :turn ParseResult2(.Expression).init(emptyExpression);
             },
-            else => ParseResult{ .Expression = emptyExpression },
+            else => ParseResult2(.Expression).init(emptyExpression),
         };
         self.nextToken();
         return tok;
-    }
-
-    fn parseCondition(_: *Parser) bool { //ConditionError!ConditionExpression {
-        return true;
     }
 
     fn parseIdentifier(self: *Parser) LetError!LetExpression {
