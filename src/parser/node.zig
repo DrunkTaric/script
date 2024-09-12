@@ -1,16 +1,7 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 
-pub const Types = enum {
-    call,
-    literal,
-    identifier,
-    if_clause,
-    if_statment,
-    else_clause,
-    else_statment,
-    return_statment,
-};
+pub const Types = enum { call, literal, identifier, if_clause, if_statment, else_clause, else_statment };
 
 pub const Node = struct {
     const Self = @This();
@@ -40,7 +31,7 @@ pub const Node = struct {
 
 const Program = struct {
     allocator: Allocator,
-    nodes: std.ArrayList(*@TypeOf(Node)),
+    nodes: std.ArrayList(*Node),
 
     fn init() *Program {
         const allocator = std.heap.page_allocator;
